@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CourseService } from './course.service';
 import { Course } from './course';
 import { FilterTextComponent } from '../blocks/filter-text';
-import { store, filterCourses } from '../store';
+import { store, filterCourses, IAppState } from '../store';
+import { NgRedux, select } from 'ng2-redux';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-course-list',
@@ -11,9 +13,13 @@ import { store, filterCourses } from '../store';
 })
 export class CourseListComponent implements OnInit {
   // courses: Course[];
-  filteredCourses = [];
+  // filteredCourses = [];
+  @select('filterCourses') filteredCourses$: Observable<Course>;
 
-  constructor(private _courseService: CourseService) {
+  constructor(
+    // private _courseService: CourseService
+    private ngRedux: NgRedux<IAppState>
+    ) {
   }
 
   filterChanged(searchText: string) {
@@ -29,18 +35,18 @@ export class CourseListComponent implements OnInit {
   //     });
   // }
 
-  updateFromState() {
-    const allStates = store.getState();
-    // this.courses = allStates.courses;
-    this.filteredCourses = allStates.filterCourses;
-  }
+  // updateFromState() {
+  //   const allStates = store.getState();
+  //   // this.courses = allStates.courses;
+  //   this.filteredCourses = allStates.filterCourses;
+  // }
 
   ngOnInit() {
     // this.getCourses();
-    this.updateFromState();
-    store.subscribe(() =>  {
-      this.updateFromState()
-    })
+    // this.updateFromState();
+    // store.subscribe(() =>  {
+    //   this.updateFromState()
+    // })
     componentHandler.upgradeDom();
   }
 }
